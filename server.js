@@ -21,6 +21,16 @@ server.on('connection', socket => {
       return;
     }
 
+    for (const client of server.clients) {
+      if(client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({
+          type: "chat",
+          from: socket.name,
+          message: data.message
+        }))
+      }
+    }
+
     socket.send(JSON.stringify({
       reply: `Message received from ${socket.name || 'unknown'}`
     }));
